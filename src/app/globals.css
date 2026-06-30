@@ -1,0 +1,62 @@
+@import "react-big-calendar/lib/css/react-big-calendar.css";
+@import "tailwindcss";
+
+@theme inline {
+  --color-ccb-blue:  #004c9e;
+  --color-ccb-cyan:  #009de2;
+  --color-ccb-deep:  #002d6b;
+  --color-ccb-pale:  #E6F0FA;
+  --color-app-bg:    #eef1f6;
+  --color-success:   #2D8A4E;
+  --color-warning:   #f39c12;
+  --color-danger:    #e74c3c;
+  --font-sans: var(--font-montserrat), system-ui, sans-serif;
+}
+
+body {
+  background: var(--color-app-bg);
+  color: #1a1a2e;
+}
+
+/* react-big-calendar custom overrides */
+.rbc-calendar {
+  font-family: var(--font-sans);
+}
+
+.rbc-toolbar button {
+  color: #004c9e;
+  border-color: #d0dce9;
+}
+
+.rbc-toolbar button:hover,
+.rbc-toolbar button.rbc-active {
+  background: #004c9e;
+  color: #fff;
+  border-color: #004c9e;
+}
+
+.rbc-today {
+  background: #E6F0FA;
+}
+
+.rbc-event {
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  border: none !important;
+  padding: 2px 6px;
+}
+
+.rbc-event:focus {
+  outline: 2px solid #009de2;
+  outline-offset: 2px;
+}
+
+.rbc-header {
+  font-weight: 700;
+  font-size: 13px;
+  color: #5d6d7e;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 8px 4px;
+}
