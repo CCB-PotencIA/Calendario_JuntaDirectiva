@@ -87,20 +87,40 @@ CREATE INDEX IF NOT EXISTS idx_tasks_status      ON tasks (status);
 -- ============================================================
 -- DESPUÉS DE EJECUTAR ESTE SQL:
 --
--- 1. Ve a Authentication → Users → Add user (para cada departamento)
--- 2. Copia el UUID del usuario creado
--- 3. Inserta su perfil con el INSERT de abajo (uno por departamento)
+-- El login usa selector de departamento + contraseña (sin email visible).
+-- Internamente cada usuario tiene el email: slug@ccb.internal
+--
+-- Para crear los 8 usuarios:
+-- 1. Authentication → Users → Add user → "Create new user"
+-- 2. Email:    secretaria@ccb.internal   (según la tabla de abajo)
+-- 3. Password: la que decidas para ese departamento
+-- 4. DESHABILITA "Send email confirmation" (toggle off)
+-- 5. Copia el UUID del usuario creado
+-- 6. Descomenta e inserta el perfil correspondiente abajo
 -- ============================================================
+
+-- Tabla de emails por departamento (para crear usuarios en Auth):
+--
+--   Departamento        Email Auth                  Slug
+--   ─────────────────── ─────────────────────────── ─────────────────
+--   Secretaría General  secretaria@ccb.internal     secretaria
+--   Conexiones          conexiones@ccb.internal     conexiones
+--   Control Interno     control_interno@ccb.internal control_interno
+--   Comunicaciones      comunicaciones@ccb.internal comunicaciones
+--   Financiera          financiera@ccb.internal     financiera
+--   Administrativa      administrativa@ccb.internal administrativa
+--   Compras             compras@ccb.internal        compras
+--   VP Registro y TD    vp_registro_td@ccb.internal vp_registro_td
 
 -- ── 5. INSERT de perfiles — ejecutar uno por usuario ────────
 -- Reemplaza <UUID> con el UUID del usuario creado en Auth
 
 -- INSERT INTO profiles (id, department, department_name, email) VALUES
---   ('<UUID>', 'secretaria',     'Secretaría General', 'secretaria@tudominio.com'),
---   ('<UUID>', 'conexiones',     'Conexiones',         'conexiones@tudominio.com'),
---   ('<UUID>', 'control_interno','Control Interno',    'control.interno@tudominio.com'),
---   ('<UUID>', 'comunicaciones', 'Comunicaciones',     'comunicaciones@tudominio.com'),
---   ('<UUID>', 'financiera',     'Financiera',         'financiera@tudominio.com'),
---   ('<UUID>', 'administrativa', 'Administrativa',     'administrativa@tudominio.com'),
---   ('<UUID>', 'compras',        'Compras',            'compras@tudominio.com'),
---   ('<UUID>', 'vp_registro_td', 'VP Registro y TD',   'vp.registro@tudominio.com');
+--   ('<UUID>', 'secretaria',      'Secretaría General', 'secretaria@ccb.internal'),
+--   ('<UUID>', 'conexiones',      'Conexiones',         'conexiones@ccb.internal'),
+--   ('<UUID>', 'control_interno', 'Control Interno',    'control_interno@ccb.internal'),
+--   ('<UUID>', 'comunicaciones',  'Comunicaciones',     'comunicaciones@ccb.internal'),
+--   ('<UUID>', 'financiera',      'Financiera',         'financiera@ccb.internal'),
+--   ('<UUID>', 'administrativa',  'Administrativa',     'administrativa@ccb.internal'),
+--   ('<UUID>', 'compras',         'Compras',            'compras@ccb.internal'),
+--   ('<UUID>', 'vp_registro_td',  'VP Registro y TD',   'vp_registro_td@ccb.internal');

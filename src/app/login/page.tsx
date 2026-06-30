@@ -3,10 +3,17 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
+import { DEPARTMENTS } from '@/lib/departments'
+
+// Supabase requires an email internally — users never see this.
+// We derive it from the department slug so setup is simple.
+function slugToEmail(slug: string) {
+  return `${slug}@ccb.internal`
+}
 
 export default function LoginPage() {
   const router = useRouter()
-  const [email, setEmail] = useState('')
+  const [department, setDepartment] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -17,10 +24,13 @@ export default function LoginPage() {
     setLoading(true)
 
     const supabase = createClient()
-    const { error: authError } = await supabase.auth.signInWithPassword({ email, password })
+    const { error: authError } = await supabase.auth.signInWithPassword({
+      email: slugToEmail(department),
+      password,
+    })
 
     if (authError) {
-      setError('Credenciales incorrectas. Verifica tu email y contraseña.')
+      setError('Contraseña incorrecta o departamento no habilitado.')
       setLoading(false)
       return
     }
@@ -57,22 +67,26 @@ export default function LoginPage() {
 
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-600 text-[#5d6d7e] mb-1.5">
-                Correo electrónico
+              <label className="block text-sm font-semibold text-[#5d6d7e] mb-1.5">
+                Departamento
               </label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+              <select
+                value={department}
+                onChange={(e) => setDepartment(e.target.value)}
                 required
-                autoComplete="email"
-                placeholder="usuario@ccb.org.co"
-                className="w-full px-3 py-2.5 border border-[#d0dce9] rounded-lg text-sm text-[#1a1a2e] placeholder-[#a0aec0] focus:outline-none focus:ring-2 focus:ring-[#004c9e] focus:border-transparent transition"
-              />
+                className="w-full px-3 py-2.5 border border-[#d0dce9] rounded-lg text-sm text-[#1a1a2e] bg-white focus:outline-none focus:ring-2 focus:ring-[#004c9e] focus:border-transparent transition"
+              >
+                <option value="" disabled>Selecciona tu departamento</option>
+                {DEPARTMENTS.map((d) => (
+                  <option key={d.slug} value={d.slug}>
+                    {d.name}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div>
-              <label className="block text-sm font-600 text-[#5d6d7e] mb-1.5">
+              <label className="block text-sm font-semibold text-[#5d6d7e] mb-1.5">
                 Contraseña
               </label>
               <input
@@ -94,7 +108,7 @@ export default function LoginPage() {
 
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || !department}
               className="w-full py-2.5 px-4 rounded-lg font-semibold text-white text-sm transition-opacity disabled:opacity-60 cursor-pointer"
               style={{ background: '#004c9e' }}
             >
